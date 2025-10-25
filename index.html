@@ -1,0 +1,3284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuros en 360° | Orientación Vocacional con Realidad Virtual</title>
+    <!-- Tailwind CSS CDN para utilidades rápidas, aunque la mayoría del estilo será personalizado -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para iconos (ej. redes sociales) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variables CSS para colores neón y fondo */
+        :root {
+            --neon-blue: #00f5ff;
+            --neon-orange: #ff5e00;
+            --dark-bg: #0f172a;
+            --darker-bg: #0a1120;
+            --text-color: #e2e8f0; /* light gray for general text */
+            --accent-blue-light: rgba(0, 245, 255, 0.2);
+            --accent-orange-light: rgba(255, 94, 0, 0.2);
+        }
+
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: 'Inter', sans-serif; /* Fuente moderna y limpia */
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            scroll-behavior: smooth; /* Desplazamiento suave para anclas */
+            overflow-x: hidden; /* Evita el scroll horizontal */
+        }
+
+        /* Contenedor principal para centrar contenido */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Estilos de texto neón */
+        .neon-text-blue {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue), 0 0 15px var(--neon-blue);
+        }
+
+        .neon-text-orange {
+            color: var(--neon-orange);
+            text-shadow: 0 0 5px var(--neon-orange), 0 0 15px var(--neon-orange);
+        }
+
+        /* Estilos de borde neón */
+        .neon-border-blue {
+            box-shadow: 0 0 10px var(--neon-blue), inset 0 0 10px var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+        }
+
+        .neon-border-orange {
+            box-shadow: 0 0 10px var(--neon-orange), inset 0 0 10px var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+        }
+
+        /* Botones generales */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--neon-blue);
+            color: var(--darker-bg);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+            box-shadow: 0 0 8px var(--neon-orange);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--neon-orange);
+            color: var(--darker-bg);
+            box-shadow: 0 0 15px var(--neon-orange);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .logo:hover {
+            color: var(--neon-blue);
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 2.5rem;
+        }
+
+        .navbar .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover::after,
+        .navbar .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .navbar .hamburger {
+            display: none; /* Oculto por defecto en desktop */
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        .navbar .hamburger .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--neon-blue);
+            margin: 5px auto;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .navbar .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar .hamburger.active .bar:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .navbar .hamburger.active .bar:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .navbar .mobile-menu {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .navbar .mobile-menu.active {
+            transform: translateX(0);
+            display: flex;
+        }
+
+        .navbar .mobile-menu li {
+            margin: 1.5rem 0;
+        }
+
+        .navbar .mobile-menu a {
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .mobile-menu a:hover {
+            color: var(--neon-orange);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--darker-bg) 0%, rgba(0, 245, 255, 0.1) 100%);
+            padding: 10rem 0 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+        }
+
+        .hero-content {
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .hero .cta-buttons .btn {
+            margin: 0 1rem;
+        }
+
+        .hero-image {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: rotate3D 20s linear infinite;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes rotate3D {
+            from { transform: rotateY(0deg) rotateX(0deg); }
+            to { transform: rotateY(360deg) rotateX(360deg); }
+        }
+
+        /* Secciones generales */
+        section {
+            padding: 6rem 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        section:nth-of-type(even) {
+            background-color: var(--darker-bg);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--text-color);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Acerca del Proyecto - Tabs */
+        .tabs-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--darker-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .tab-button.active::after {
+            background-color: var(--neon-blue);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .tab-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+
+        .tab-content ul li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        .tab-content ul li::before {
+            content: '•'; /* Bullet point */
+            color: var(--neon-orange);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -0.2rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            color: var(--neon-blue);
+        }
+
+        .feature-card h4 svg {
+            margin-right: 0.5rem;
+            color: var(--neon-orange);
+        }
+
+        /* Prueba Vocacional */
+        .vocational-form-container {
+            max-width: 900px; /* Increased max-width for better question display */
+            margin: 0 auto;
+            background-color: var(--darker-bg);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--neon-blue);
+            border-radius: 4px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-step h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .form-step p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .question-group {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: var(--dark-bg);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Ocultar el título de la carrera en el grupo de preguntas */
+        .question-group h4 {
+            display: none; /* Oculta el título de la carrera */
+        }
+
+        .question-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .question-item label {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+
+        .rating-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .rating-options label {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .rating-options label:hover {
+            background-color: rgba(0, 245, 255, 0.1);
+            border-color: var(--neon-blue);
+        }
+
+        .rating-options input[type="radio"] {
+            margin-right: 0.5rem;
+            accent-color: var(--neon-blue);
+            transform: scale(1.1);
+        }
+
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+        }
+
+        .results-section {
+            text-align: center;
+        }
+
+        .results-section .spinner {
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-top: 8px solid var(--neon-blue);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-content {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .results-content h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .results-table th, .results-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+        }
+
+        .results-table th {
+            background-color: rgba(0, 245, 255, 0.1);
+            color: var(--neon-blue);
+            font-weight: 600;
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table .high-affinity {
+            background-color: rgba(255, 94, 0, 0.1);
+            border-left: 4px solid var(--neon-orange);
+        }
+
+        .results-table .high-affinity td {
+            color: var(--neon-orange);
+            font-weight: 600;
+        }
+
+        .results-table .affinity-level {
+            font-weight: 500;
+        }
+
+        .results-table .affinity-level.alta { color: var(--neon-orange); }
+        .results-table .affinity-level.media { color: var(--neon-blue); }
+        .results-table .affinity-level.baja { color: var(--text-color); }
+        .results-table .affinity-level.nula { color: #888; }
+
+        .results-table .star-icon {
+            color: var(--neon-orange);
+            margin-right: 0.5rem;
+        }
+
+        /* Top 3 Careers Section */
+        .top-careers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .top-career-card {
+            background-color: var(--dark-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
+            border: 1px solid var(--neon-blue);
+            text-align: center;
+        }
+
+        .top-career-card h4 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--neon-orange);
+            margin-bottom: 0.8rem;
+        }
+
+        .top-career-card p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Realidad Virtual Section */
+        .vr-filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .vr-filter-btn {
+            background-color: var(--darker-bg);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .vr-filter-btn:hover {
+            background-color: rgba(0, 245, 255, 0.1);
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .vr-filter-btn.active {
+            background-color: var(--neon-blue);
+            color: var(--darker-bg);
+            box-shadow: 0 0 10px var(--neon-blue);
+            border-color: var(--neon-blue);
+        }
+
+        .career-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .career-card {
+            background-color: var(--darker-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .career-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--neon-orange);
+        }
+
+        .career-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: filter 0.3s ease;
+        }
+
+        .career-card:hover .career-card-image {
+            filter: brightness(1);
+        }
+
+        .career-card-content {
+            padding: 1.5rem;
+        }
+
+        .career-card-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: white;
+        }
+
+        .career-card-content p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            margin-bottom: 1.2rem;
+        }
+
+        .career-card-content .details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .career-card-content .details span {
+            display: flex;
+            align-items: center;
+        }
+
+        .career-card-content .details svg {
+            margin-right: 0.4rem;
+            color: var(--neon-blue);
+        }
+
+        .vr-simulations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .vr-simulation-card {
+            background-color: var(--darker-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .vr-simulation-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            border-color: var(--neon-blue);
+        }
+
+        .vr-simulation-card .icon {
+            font-size: 3rem;
+            color: var(--neon-orange);
+            margin-bottom: 1rem;
+        }
+
+        .vr-simulation-card h4 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: white;
+        }
+
+        .vr-simulation-card p {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Explora Más Section */
+        .explore-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        @media (min-width: 992px) {
+            .explore-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .explore-card {
+            background-color: var(--darker-bg);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .explore-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .university-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .university-item {
+            background-color: var(--dark-bg);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            flex-direction: column; /* Changed to column for better mobile stacking */
+            align-items: flex-start; /* Align items to start */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .university-item:hover {
+            background-color: rgba(0, 245, 255, 0.1);
+            border-color: var(--neon-blue);
+        }
+
+        .university-item h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem; /* Added margin for spacing */
+        }
+
+        .university-item .career-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .university-item .career-links a {
+            font-size: 0.9rem;
+            color: var(--neon-orange);
+            text-decoration: none;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid var(--neon-orange);
+            border-radius: 0.3rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .university-item .career-links a:hover {
+            background-color: var(--neon-orange);
+            color: var(--darker-bg);
+        }
+
+        .university-item .no-available {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+        }
+
+        .career-details-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Estilo para el select en la sección "Explora Más" */
+        .career-details-selector select {
+            background-color: var(--dark-bg); /* Fondo oscuro */
+            color: var(--text-color); /* Texto claro */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            appearance: none; /* Eliminar estilo nativo del select */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20512%22%3E%3Cpath%20fill%3D%22%23e2e8f0%22%20d%3D%22M192%20256L64%20128l-32%2032L128%20256l-96%2096%2032%2032z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha personalizada */
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 0.8em;
+            cursor: pointer;
+        }
+
+        .career-details-selector select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 2px var(--accent-blue-light);
+        }
+
+        .career-details-content {
+            background-color: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .career-details-content h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--neon-orange); /* Changed to neon-orange for consistency */
+        }
+
+        .career-details-content ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .career-details-content ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--darker-bg);
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-col h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--neon-blue);
+        }
+
+        .footer-col p, .footer-col a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--neon-orange);
+        }
+
+        .social-links {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Media Queries para Responsividad */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+            }
+            .navbar .hamburger {
+                display: block;
+            }
+            .hero h1 {
+                font-size: 3rem;
+            }
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            .hero .cta-buttons .btn {
+                margin: 0.5rem 0;
+                display: block;
+            }
+            .hero-image {
+                width: 400px;
+                height: 400px;
+                bottom: -5%;
+                right: -5%;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+            .section-subtitle {
+                font-size: 1rem;
+            }
+            .tabs-nav {
+                flex-wrap: wrap;
+            }
+            .tab-button {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+            .form-step h3 {
+                font-size: 1.8rem;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .career-cards-grid, .vr-simulations-grid, .top-careers-grid { /* Added top-careers-grid */
+                grid-template-columns: 1fr;
+            }
+            .explore-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                text-align: center;
+            }
+            .footer-col {
+                margin-bottom: 1.5rem;
+            }
+            .footer-col p, .footer-col a {
+                display: inline-block; /* Para centrar en móvil si es necesario */
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#home" class="logo neon-text-blue">FUTUROS <span class="neon-text-orange">360°</span></a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Inicio</a></li>
+                <li><a href="#about" class="nav-link">Acerca</a></li>
+                <li><a href="#vocational-test" class="nav-link">Prueba Vocacional</a></li>
+                <li><a href="#chaside-test" class="nav-link">Test CHASIDE</a></li> <!-- Nuevo enlace -->
+                <li><a href="#virtual-reality" class="nav-link">Realidad Virtual</a></li>
+                <li><a href="#explore-more" class="nav-link">Explora Más</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle navigation">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+        <ul class="mobile-menu">
+            <li><a href="#home" class="nav-link">Inicio</a></li>
+            <li><a href="#about" class="nav-link">Acerca</a></li>
+            <li><a href="#vocational-test" class="nav-link">Prueba Vocacional</a></li>
+            <li><a href="#chaside-test" class="nav-link">Test CHASIDE</a></li> <!-- Nuevo enlace -->
+            <li><a href="#virtual-reality" class="nav-link">Realidad Virtual</a></li>
+            <li><a href="#explore-more" class="nav-link">Explora Más</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="neon-text-blue">Descubre tu <span class="neon-text-orange">futuro</span></h1>
+            <p class="subtitle">con Realidad Virtual 360°</p>
+            <div class="cta-buttons">
+                <a href="#vocational-test" class="btn btn-primary">Haz la Prueba</a>
+                <a href="#virtual-reality" class="btn btn-outline">Explora VR</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/978e753d-9e07-4b01-bd3c-46cee0c1b956.png" alt="Estudiante usando gafas VR">
+        </div>
+    </header>
+
+    <!-- Acerca del Proyecto Section -->
+    <section id="about" class="bg-dark-bg">
+        <div class="container">
+            <h2 class="section-title neon-text-blue">ACERCA DEL <span class="neon-text-orange">PROYECTO</span></h2>
+            <p class="section-subtitle">"Futuros en 360°" te guía en tu elección de carrera con tecnología inmersiva.</p>
+
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="vr-intro">Acerca de la VR</button>
+                    <button class="tab-button" data-tab="how-it-works">¿Cómo funciona?</button>
+                    <button class="tab-button" data-tab="objectives">Objetivos</button>
+                    <button class="tab-button" data-tab="expected-results">Resultados Esperados</button>
+                </div>
+
+                <div id="vr-intro" class="tab-content active">
+                    <h3 class="neon-text-blue">Realidad Virtual en Educación</h3>
+                    <p>La Realidad Virtual (VR) está revolucionando la forma en que aprendemos y experimentamos el mundo. En "Futuros en 360°", utilizamos esta tecnología para transportarte directamente a escenarios laborales reales.</p>
+                    <p>Imagina poder:</p>
+                    <ul>
+                        <li>Recorrer un hospital como médico</li>
+                        <li>Participar en un juicio como abogado</li>
+                        <li>Supervisar una obra de ingeniería civil</li>
+                    </ul>
+                    <div class="feature-grid mt-8">
+                        <img src="https://futuroelectrico.com/wp-content/uploads/2020/08/realidad-virtual-8.jpg" alt="Estudiante con gafas VR en un aula futurista" class="rounded-lg">
+                        <img src="https://www.obicex.es/sites/obicex/files/styles/blog_desktop_webp/public/images/blog/diferencia-entre-realidad-virtual-y-aumentada.jpg.webp?itok=lQ5MCcJg" alt="Simulación de laboratorio virtual" class="rounded-lg">
+                    </div>
+                </div>
+
+                <div id="how-it-works" class="tab-content">
+                    <h3 class="neon-text-orange">Nuestro Proceso</h3>
+                    <p>"Futuros en 360°" combina psicología vocacional con tecnología inmersiva para ofrecerte una experiencia única en la toma de decisiones profesionales.</p>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><i class="fas fa-clipboard-list"></i> Prueba Vocacional</h4>
+                            <p>Completa nuestro cuestionario científico para identificar tus intereses, habilidades y valores.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i class="fas fa-user-graduate"></i> Perfil Vocacional</h4>
+                            <p>Recibe un análisis detallado de tus fortalezas y recomendaciones de carreras alineadas a tu perfil.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i class="fas fa-vr-cardboard"></i> Experiencias VR</h4>
+                            <p>Sumérgete en nuestras simulaciones profesionales para vivir el día a día de las carreras recomendadas.</p>
+                        </div>
+                    </div>
+                    <div class="feature-grid mt-8">
+                        <img src="https://placehold.co/400x250/0f172a/e2e8f0?text=Proceso+Paso+1" alt="Persona llenando un formulario digital" class="rounded-lg">
+                        <img src="https://placehold.co/400x250/0f172a/e2e8f0?text=Proceso+Paso+2" alt="Gráfico de análisis de datos" class="rounded-lg">
+                        <img src="https://placehold.co/400x250/0f172a/e2e8f0?text=Proceso+Paso+3" alt="Persona explorando un entorno VR" class="rounded-lg">
+                    </div>
+                </div>
+
+                <div id="objectives" class="tab-content">
+                    <h3 class="neon-text-blue">Nuestros Objetivos</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4><i class="fas fa-check-circle"></i> Reducir la indecisión</h4>
+                            <p>Ayudar a los estudiantes a superar la incertidumbre proporcionando experiencias concretas.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i class="fas fa-check-circle"></i> Facilitar elecciones informadas</h4>
+                            <p>Proporcionar datos reales y experiencias auténticas para decisiones basadas en conocimiento.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i class="fas fa-check-circle"></i> Promover el autoconocimiento</h4>
+                            <p>Ofrecer herramientas para que los estudiantes descubran sus verdaderas pasiones y fortalezas.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4><i class="fas fa-check-circle"></i> Innovación educativa</h4>
+                            <p>Introducir tecnología de vanguardia en los procesos de orientación vocacional tradicionales.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="expected-results" class="tab-content">
+                    <h3 class="neon-text-orange">Impacto Esperado</h3>
+                    <p>En Futuros en 360°, creemos que cada estudiante merece tomar decisiones informadas sobre su futuro. Nuestra experiencia inmersiva en Realidad Virtual está diseñada para transformar la orientación vocacional tradicional. ¿El resultado? Más claridad, más seguridad, y más propósito.</p>
+                    <ul>
+                        <li>85% de los estudiantes reducen significativamente su indecisión vocacional.</li>
+                        <li>Los usuarios tienen más probabilidades de sentirse satisfechos con su elección de carrera.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prueba Vocacional Section -->
+    <section id="vocational-test" class="bg-darker-bg">
+        <div class="container">
+            <h2 class="section-title neon-text-orange">PRUEBA <span class="neon-text-blue">VOCACIONAL</span></h2>
+            <p class="section-subtitle">
+                Esta prueba vocacional te ayudará a orientar tus intereses profesionales. Se basa en 10 áreas o carreras comunes.
+                No es una prueba definitiva ni evaluativa, sino una herramienta de autoconocimiento. Al finalizar, se generarán resultados personalizados y podrás explorar simulaciones profesionales relacionadas con tus afinidades.
+            </p>
+
+            <div class="vocational-form-container">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+                <form id="vocationalForm">
+                    <!-- Preguntas de la prueba vocacional -->
+                    <!-- Bloque 1 -->
+                    <div class="form-step active" data-step="1">
+                        <div class="question-group" data-career="Medicina">
+                            <div class="question-item">
+                                <label for="q1">1. Me gustaría aprender cómo funcionan los órganos del cuerpo humano.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q1" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q1" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q1" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q1" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q2">2. Me interesa ayudar a personas que están enfermas o heridas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q2" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q2" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q2" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q2" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q3">3. Me atrae la idea de investigar enfermedades y sus tratamientos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q3" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q3" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q3" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q3" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q4">4. Me veo trabajando en hospitales o centros de salud salvando vidas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q4" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q4" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q4" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q4" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step" disabled>Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 2 -->
+                    <div class="form-step" data-step="2">
+                        <div class="question-group" data-career="Derecho">
+                            <div class="question-item">
+                                <label for="q5">5. Me interesa conocer las leyes y cómo se aplican en la vida diaria.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q5" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q5" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q5" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q5" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q6">6. Me gustaría defender personas en un juicio.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q6" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q6" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q6" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q6" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q7">7. Me atrae debatir temas controversiales y argumentar con fundamentos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q7" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q7" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q7" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q7" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q8">8. Disfruto leer sobre justicia, normas o derechos humanos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q8" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q8" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q8" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q8" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 3 -->
+                    <div class="form-step" data-step="3">
+                        <div class="question-group" data-career="Administración de empresas">
+                            <div class="question-item">
+                                <label for="q9">9. Me gustaría dirigir una empresa y tomar decisiones importantes.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q9" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q9" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q9" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q9" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q10">10. Me interesa aprender cómo se organiza una empresa.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q10" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q10" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q10" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q10" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q11">11. Me atrae la idea de liderar grupos de trabajo para alcanzar objetivos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q11" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q11" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q11" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q11" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q12">12. Me gustaría analizar datos financieros y de mercado.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q12" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q12" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q12" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q12" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 4 -->
+                    <div class="form-step" data-step="4">
+                        <div class="question-group" data-career="Economía">
+                            <div class="question-item">
+                                <label for="q13">13. Me interesa saber cómo funcionan los mercados y la economía global.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q13" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q13" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q13" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q13" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q14">14. Me gusta analizar estadísticas y datos económicos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q14" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q14" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q14" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q14" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q15">15. Me atrae estudiar las decisiones financieras de las personas o gobiernos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q15" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q15" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q15" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q15" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q16">16. Me gustaría investigar las causas de la pobreza o la inflación.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q16" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q16" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q16" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q16" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 5 -->
+                    <div class="form-step" data-step="5">
+                        <div class="question-group" data-career="Ingeniería de sistemas">
+                            <div class="question-item">
+                                <label for="q17">17. Me interesa aprender a programar y crear software.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q17" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q17" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q17" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q17" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q18">18. Me atraen los avances tecnológicos y su aplicación práctica.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q18" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q18" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q18" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q18" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q19">19. Me gustaría diseñar páginas web, apps o videojuegos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q19" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q19" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q19" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q19" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q20">20. Me gusta resolver problemas con ayuda de la tecnología.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q20" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q20" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q20" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q20" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 6 -->
+                    <div class="form-step" data-step="6">
+                        <div class="question-group" data-career="Ingeniería civil">
+                            <div class="question-item">
+                                <label for="q21">21. Me gustaría diseñar y construir edificios, puentes o carreteras.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q21" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q21" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q21" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q21" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q22">22. Me interesa saber cómo funcionan las estructuras y los materiales.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q22" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q22" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q22" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q22" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q23">23. Me atrae la planificación de obras a gran escala.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q23" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q23" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q23" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q23" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q24">24. Disfruto aplicar matemáticas en proyectos reales de construcción.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q24" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q24" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q24" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q24" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 7 -->
+                    <div class="form-step" data-step="7">
+                        <div class="question-group" data-career="Enfermería">
+                            <div class="question-item">
+                                <label for="q25">25. Me interesa cuidar personas enfermas y ayudarlas a recuperarse.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q25" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q25" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q25" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q25" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q26">26. Me gustaría brindar apoyo emocional a quienes lo necesitan.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q26" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q26" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q26" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q26" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q27">27. Me atrae trabajar en hospitales, clínicas o centros de salud.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q27" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q27" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q27" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q27" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q28">28. Me veo atendiendo pacientes y acompañándolos con empatía.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q28" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q28" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q28" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q28" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 8 -->
+                    <div class="form-step" data-step="8">
+                        <div class="question-group" data-career="Negocios internacionales">
+                            <div class="question-item">
+                                <label for="q29">29. Me gustaría trabajar en empresas que se relacionan con otros países.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q29" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q29" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q29" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q29" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q30">30. Me atrae conocer diferentes culturas y formas de hacer negocios.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q30" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q30" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q30" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q30" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q31">31. Me interesa viajar por trabajo y representar a una empresa.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q31" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q31" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q31" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q31" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q32">32. Disfruto aprender sobre comercio exterior e importaciones/exportaciones.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q32" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q32" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q32" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q32" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 9 -->
+                    <div class="form-step" data-step="9">
+                        <div class="question-group" data-career="Ingeniería industrial">
+                            <div class="question-item">
+                                <label for="q33">33. Me atrae organizar y optimizar procesos dentro de una empresa.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q33" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q33" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q33" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q33" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q34">34. Me interesa mejorar la eficiencia en fábricas o sistemas productivos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q34" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q34" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q34" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q34" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q35">35. Me gustaría planificar recursos humanos, materiales y tiempos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q35" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q35" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q35" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q35" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q36">36. Me gusta buscar soluciones prácticas a problemas de producción.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q36" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q36" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q36" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q36" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Bloque 10 -->
+                    <div class="form-step" data-step="10">
+                        <div class="question-group" data-career="Comunicación social">
+                            <div class="question-item">
+                                <label for="q37">37. Me interesa hablar en público y comunicar ideas con claridad.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q37" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q37" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q37" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q37" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q38">38. Me gustaría trabajar en medios como televisión, radio o redes.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q38" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q38" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q38" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q38" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q39">39. Disfruto escribir, entrevistar, narrar o contar historias.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q39" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q39" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q39" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q39" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="q40">40. Me atrae crear contenido audiovisual, informativo o creativo.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="q40" value="1" required> 1 = Nada me interesa</label>
+                                    <label><input type="radio" name="q40" value="2"> 2 = Poco me interesa</label>
+                                    <label><input type="radio" name="q40" value="3"> 3 = Me interesa</label>
+                                    <label><input type="radio" name="q40" value="4"> 4 = Me interesa mucho</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline prev-step">Anterior</button>
+                            <button type="submit" class="btn btn-primary">Ver Resultados</button>
+                        </div>
+                    </div>
+
+                    <!-- Results Step -->
+                    <div class="form-step" data-step="11">
+                        <h3 class="neon-text-orange">¡Tus Resultados Vocacionales!</h3>
+                        <p>Aquí tienes un resumen de tus afinidades profesionales basado en tus respuestas.</p>
+                        <div class="results-section">
+                            <div class="spinner hidden"></div>
+                            <p class="text-center loading-message">Generando tu perfil vocacional...</p>
+                            <div id="resultsContent" class="results-content hidden">
+                                <h4 class="neon-text-blue text-center mb-4">Tus 3 Carreras con Mayor Afinidad</h4>
+                                <div class="top-careers-grid" id="topCareersGrid">
+                                    <!-- Top 3 careers will be inserted here -->
+                                </div>
+
+                                <h4 class="neon-text-blue text-center mt-8 mb-4">Resultados Completos</h4>
+                                <table class="results-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Carrera</th>
+                                            <th>Puntaje</th>
+                                            <th>Afinidad</th>
+                                            <th>Interpretación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultsTableBody">
+                                        <!-- All results will be inserted here -->
+                                    </tbody>
+                                </table>
+                                <div class="text-center mt-8 flex flex-col md:flex-row justify-center gap-4">
+                                    <button type="button" class="btn btn-outline" id="restartTestBtn">Hacer la prueba de nuevo</button>
+                                    <a href="#virtual-reality" class="btn btn-primary" id="exploreAllSimulationsBtn">Explorar todas las simulaciones</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation hidden"> <!-- Hidden as buttons are now in resultsContent -->
+                            <button type="button" class="btn btn-outline prev-step">Volver a la prueba</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Test CHASIDE Section -->
+    <section id="chaside-test" class="bg-dark-bg">
+        <div class="container">
+            <h2 class="section-title neon-text-blue">TEST <span class="neon-text-orange">CHASIDE</span></h2>
+            <p class="section-subtitle">
+                Este test te ayudará a identificar tus intereses vocacionales en diferentes áreas, complementando la prueba anterior.
+                Responde "Sí" o "No" a cada pregunta según tu interés.
+            </p>
+
+            <div class="vocational-form-container">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="chasideProgressBar"></div>
+                </div>
+
+                <form id="chasideForm">
+                    <!-- Categoría H – Humanísticas, Ciencias Jurídicas y Sociales -->
+                    <div class="form-step active" data-step="1">
+                        <div class="question-group">
+                            <div class="question-item">
+                                <label for="chaside-h1">1. Me gusta leer o escribir acerca de problemas sociales.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h1" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h1" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-h2">2. Me interesa colaborar en actividades de servicio a la comunidad.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h2" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h2" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-h3">3. Me atrae defender a personas que son tratadas injustamente.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h3" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h3" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-h4">4. Me gustaría estudiar la conducta humana.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h4" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h4" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-h5">5. Me gusta participar en debates sobre temas sociales o jurídicos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h5" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h5" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-h6">6. Me interesa enseñar y explicar a otros lo que sé.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h6" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h6" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-h7">7. Disfruto trabajar en equipo para resolver problemas sociales.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-h7" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-h7" value="0"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline chaside-prev-step" disabled>Anterior</button>
+                            <button type="button" class="btn btn-primary chaside-next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Categoría C – Administrativas y Contables -->
+                    <div class="form-step" data-step="2">
+                        <div class="question-group">
+                            <div class="question-item">
+                                <label for="chaside-c1">1. Me gusta organizar actividades de un grupo.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c1" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c1" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-c2">2. Me atrae calcular ingresos y egresos de un negocio.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c2" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c2" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-c3">3. Me gusta llevar registros o controles de cuentas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c3" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c3" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-c4">4. Me interesa planear y dirigir proyectos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c4" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c4" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-c5">5. Me atrae analizar información financiera.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c5" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c5" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-c6">6. Me gusta coordinar el trabajo de varias personas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c6" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c6" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-c7">7. Disfruto proponer estrategias para que una empresa mejore.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-c7" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-c7" value="0"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline chaside-prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary chaside-next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Categoría S – Ciencias de la Salud -->
+                    <div class="form-step" data-step="3">
+                        <div class="question-group">
+                            <div class="question-item">
+                                <label for="chaside-s1">1. Me interesa aprender sobre el cuerpo humano.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s1" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s1" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-s2">2. Me atrae investigar sobre enfermedades y su tratamiento.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s2" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s2" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-s3">3. Me gustaría trabajar en hospitales o clínicas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s3" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s3" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-s4">4. Me gusta ayudar a las personas a recuperar su salud.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s4" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s4" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-s5">5. Me interesa la medicina y sus avances.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s5" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s5" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-s6">6. Me atrae estudiar biología o química relacionada con la salud.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s6" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s6" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-s7">7. Disfruto actividades relacionadas con el cuidado de la vida.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-s7" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-s7" value="0"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline chaside-prev-step">Anterior</button>
+                            <button type="button" class="btn btn-primary chaside-next-step">Siguiente</button>
+                        </div>
+                    </div>
+
+                    <!-- Categoría I – Ingenierías, Carreras Técnicas y Computación -->
+                    <div class="form-step" data-step="4">
+                        <div class="question-group">
+                            <div class="question-item">
+                                <label for="chaside-i1">1. Me atrae construir o reparar aparatos eléctricos o mecánicos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i1" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i1" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-i2">2. Me interesa aprender a programar o manejar sistemas de computación.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i2" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i2" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-i3">3. Disfruto resolver problemas aplicando matemáticas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i3" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i3" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-i4">4. Me atrae diseñar y construir cosas nuevas.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i4" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i4" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-i5">5. Me interesa investigar sobre tecnología.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i5" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i5" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-i6">6. Me gusta usar máquinas y herramientas para crear.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i6" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i6" value="0"> No</label>
+                                </div>
+                            </div>
+                            <div class="question-item">
+                                <label for="chaside-i7">7. Me atrae aplicar la ciencia para resolver problemas prácticos.</label>
+                                <div class="rating-options">
+                                    <label><input type="radio" name="chaside-i7" value="1" required> Sí</label>
+                                    <label><input type="radio" name="chaside-i7" value="0"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-outline chaside-prev-step">Anterior</button>
+                            <button type="submit" class="btn btn-primary">Ver Resultados</button>
+                        </div>
+                    </div>
+
+                    <!-- Results Step for CHASIDE -->
+                    <div class="form-step" data-step="5">
+                        <h3 class="neon-text-orange">¡Tus Resultados del Test CHASIDE!</h3>
+                        <p>Aquí tienes un resumen de tus afinidades vocacionales según el Test CHASIDE.</p>
+                        <div class="results-section">
+                            <div class="spinner hidden"></div>
+                            <p class="text-center loading-message">Generando tus resultados CHASIDE...</p>
+                            <div id="chasideResultsContent" class="results-content hidden">
+                                <h4 class="neon-text-blue text-center mb-4">Afinidad por Categoría CHASIDE</h4>
+                                <table class="results-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoría</th>
+                                            <th>Puntaje</th>
+                                            <th>Afinidad</th>
+                                            <th>Carreras Relacionadas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="chasideResultsTableBody">
+                                        <!-- CHASIDE results will be inserted here -->
+                                    </tbody>
+                                </table>
+                                <div class="text-center mt-8 flex flex-col md:flex-row justify-center gap-4">
+                                    <button type="button" class="btn btn-outline" id="restartChasideTestBtn">Hacer el Test CHASIDE de nuevo</button>
+                                    <a href="#virtual-reality" class="btn btn-primary" id="exploreChasideSimulationsBtn">Explorar simulaciones relacionadas</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-navigation hidden">
+                            <button type="button" class="btn btn-outline chaside-prev-step">Volver al test</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Realidad Virtual Section -->
+    <section id="virtual-reality" class="bg-darker-bg">
+        <div class="container">
+            <h2 class="section-title neon-text-blue">EXPERIENCIA <span class="neon-text-orange">360°</span></h2>
+            <p class="section-subtitle">Sumérgete en nuestras experiencias VR para vivir un día en la vida de diferentes profesionales.</p>
+
+            <div class="vr-filter-buttons">
+                <button class="vr-filter-btn active" data-filter="all">Todas</button>
+                <button class="vr-filter-btn" data-filter="health">Salud</button>
+                <button class="vr-filter-btn" data-filter="law">Derecho</button>
+                <button class="vr-filter-btn" data-filter="business">Negocios</button>
+                <button class="vr-filter-btn" data-filter="engineering">Ingeniería</button>
+                <button class="vr-filter-btn" data-filter="social">Social</button>
+            </div>
+
+            <div class="career-cards-grid" id="careerCardsGrid">
+                <!-- Career Cards will be dynamically loaded or hardcoded here -->
+                <div class="career-card" data-category="health" data-career-name="Medicina">
+                    <img src="https://blogs.iadb.org/salud/wp-content/uploads/sites/15/2020/08/SPH_Newsletters_Blogs_AUG10_GS-POST.png" alt="Médico examinando radiografía" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Medicina</h3>
+                        <p>Diagnóstico y tratamiento de enfermedades para mejorar la salud y calidad de vida.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 6-7 años</span>
+                             <a href="https://youtu.be/Pyc1VtNuonA?si=6goqZB6SZqQ59uUm" target="_blank" class="btn btn-primary">Iniciar VR</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="law" data-career-name="Derecho">
+                    <img src="https://universidadeuropea.com/resources/media/images/ramas-derecho-800x450.width-1200.format-webp.webp" alt="Abogado en sala de tribunal" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Derecho</h3>
+                        <p>Estudio y aplicación de las normas jurídicas para resolver conflictos y garantizar la justicia.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 5 años</span>
+                            <a href="https://youtu.be/BNm97vI9b7A?si=aTSatWMam-quK41E" target="_blank" class="btn btn-primary">Iniciar VR</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="business" data-career-name="Administración">
+                    <img src="https://ubjonline.b-cdn.net/wp-content/uploads/2021/08/0001.jpg" alt="Ejecutivos en reunión de negocios" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Administración</h3>
+                        <p>Planificación, organización y dirección de recursos para el éxito de organizaciones empresariales.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 4-5 años</span>
+                            <button class="btn btn-primary btn-sm explore-vr-btn" data-simulation-target="Gestión Empresarial">Explorar VR</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="business" data-career-name="Economía">
+                    <img src="https://img.pikbest.com/photo/20240523/forex-trading-investment-statistic-chart-diagram-scene-in-laptop-and-smartphone_10579559.jpg!w700wp" alt="Gráficos económicos en pantalla" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Economía</h3>
+                        <p>Análisis de la producción, distribución y consumo de bienes y servicios.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 4-5 años</span>
+                            <button class="btn btn-primary btn-sm explore-vr-btn" data-simulation-target="Mercado Financiero">Explorar VR</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="engineering" data-career-name="Ing. Sistemas">
+                    <img src="https://colombia.unir.net/wp-content/uploads/sites/4/2022/05/engineer-working-on-desktop-computer-screen-showing-cad-software-with-picture-id1176843798.webp" alt="Programador trabajando en código" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Ing. Sistemas</h3>
+                        <p>Diseño, implementación y mantenimiento de sistemas informáticos y soluciones tecnológicas.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 5 años</span>
+                            <a href="https://youtu.be/4MpK0wi5CT8?si=sfma90yT4-o2SuDh" target="_blank" class="btn btn-primary">Iniciar VR</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="engineering" data-career-name="Ing. Civil">
+                    <img src="https://d5tnfl9agh5vb.cloudfront.net/uploads/2016/07/upn_blog_ing_blogs_21-jul.jpg" alt="Ingeniero civil en obra" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Ing. Civil</h3>
+                        <p>Diseño, construcción y mantenimiento de infraestructuras como edificios, puentes y carreteras.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 5 años</span>
+                            <a href="https://youtu.be/ARBVfcuf6O0?si=SSfGEstM5P7d4kgA" target="_blank" class="btn btn-primary">Iniciar VR</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="health" data-career-name="Enfermería">
+                    <img src="https://raphaelgroup.co/wp-content/uploads/2023/09/enfermeras-tiro-medio-mascarillas-917x611.jpg.webp" alt="Enfermera atendiendo paciente" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Enfermería</h3>
+                        <p>Cuidado y atención de pacientes, promoción de la salud y prevención de enfermedades.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 4 años</span>
+                            <a href="https://youtu.be/nj18ZWnprBs?si=NWJQKKrpBoF9FzT-" target="_blank" class="btn btn-primary">Iniciar VR</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="business" data-career-name="Neg. Internacionales">
+                    <img src="https://www.certus.edu.pe/blog/wp-content/uploads/2019/08/certus-estudiar-administracion-negocios-Internacionales.jpg" alt="Mapa mundial con conexiones de negocios" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Neg. Internacionales</h3>
+                        <p>Gestión de operaciones comerciales y estratégicas a nivel global.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 4-5 años</span>
+                            <button class="btn btn-primary btn-sm explore-vr-btn" data-simulation-target="Negocios Globales">Explorar VR</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="engineering" data-career-name="Ing. Industrial">
+                    <img src="https://www.emagister.com.co/co/albums/5/2/5/0/8/xxl_cropped_2f8d2f829148cc7370fa50fcc4974d6c.jpg" alt="Diagrama de flujo de procesos" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Ing. Industrial</h3>
+                        <p>Optimización de procesos y sistemas en organizaciones para mejorar la eficiencia.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 5 años</span>
+                            <a href="https://youtu.be/1wKIcN-gTIE?si=IqQaUNiVFvwA_IIe" target="_blank" class="btn btn-primary">Iniciar VR</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-card" data-category="social" data-career-name="Comunicación Social">
+                    <img src="https://www.utadeo.edu.co/sites/tadeo/files/node/blog/field_images/comunicacion-social.jpg" alt="Persona hablando en micrófono" class="career-card-image">
+                    <div class="career-card-content">
+                        <h3 class="neon-text-blue">Comunicación Social</h3>
+                        <p>Creación y gestión de mensajes para diversos medios y audiencias.</p>
+                        <div class="details">
+                            <span><i class="far fa-clock"></i> 4-5 años</span>
+                            <button class="btn btn-primary btn-sm explore-vr-btn" data-simulation-target="Producción Audiovisual">Explorar VR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title neon-text-orange mt-16">SIMULACIONES <span class="neon-text-blue">INTERACTIVAS</span></h3>
+            <p class="section-subtitle">Necesitarás gafas de realidad virtual o puedes explorar en modo 360° desde tu dispositivo.</p>
+            <div class="vr-simulations-grid" id="vrSimulationsGrid">
+                <div class="vr-simulation-card" data-simulation-name="Simulación Médica">
+                    <div class="icon"><i class="fas fa-user-md"></i></div>
+                    <h4 class="neon-text-blue">Simulación Médica</h4>
+                    <p>Vive la experiencia de un día como médico, desde el diagnóstico hasta la cirugía.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Juicio Virtual">
+                    <div class="icon"><i class="fas fa-balance-scale"></i></div>
+                    <h4 class="neon-text-blue">Juicio Virtual</h4>
+                    <p>Participa en un caso legal, argumenta y defiende tu posición en un tribunal virtual.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Gestión Empresarial">
+                    <div class="icon"><i class="fas fa-chart-line"></i></div>
+                    <h4 class="neon-text-blue">Gestión Empresarial</h4>
+                    <p>Dirige una empresa virtual, toma decisiones estratégicas y observa el impacto en el mercado.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Mercado Financiero">
+                    <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+                    <h4 class="neon-text-blue">Mercado Financiero</h4>
+                    <p>Explora el mundo de las finanzas, invierte y analiza tendencias económicas en tiempo real.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Desarrollo de Software">
+                    <div class="icon"><i class="fas fa-laptop-code"></i></div>
+                    <h4 class="neon-text-blue">Desarrollo de Software</h4>
+                    <p>Sumérgete en el código, diseña interfaces y resuelve problemas de programación en un entorno 3D.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Construcción Civil">
+                    <div class="icon"><i class="fas fa-hard-hat"></i></div>
+                    <h4 class="neon-text-blue">Construcción Civil</h4>
+                    <p>Supervisa una obra, diseña estructuras y gestiona proyectos de ingeniería a gran escala.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Cuidado de Pacientes">
+                    <div class="icon"><i class="fas fa-syringe"></i></div>
+                    <h4 class="neon-text-blue">Cuidado de Pacientes</h4>
+                    <p>Aprende a asistir a pacientes, administrar medicamentos y brindar apoyo en un hospital virtual.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Negocios Globales">
+                    <div class="icon"><i class="fas fa-globe"></i></div>
+                    <h4 class="neon-text-blue">Negocios Globales</h4>
+                    <p>Negocia acuerdos internacionales, explora mercados extranjeros y gestiona cadenas de suministro.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Optimización Industrial">
+                    <div class="icon"><i class="fas fa-cogs"></i></div>
+                    <h4 class="neon-text-blue">Optimización Industrial</h4>
+                    <p>Diseña y mejora procesos de producción, optimiza la eficiencia y resuelve desafíos logísticos.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+                <div class="vr-simulation-card" data-simulation-name="Producción Audiovisual">
+                    <div class="icon"><i class="fas fa-microphone-alt"></i></div>
+                    <h4 class="neon-text-blue">Producción Audiovisual</h4>
+                    <p>Crea contenido para televisión, radio o redes, edita videos y produce programas en un estudio virtual.</p>
+                    <button class="btn btn-primary">Iniciar VR</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explora Más Section -->
+    <section id="explore-more" class="bg-dark-bg">
+        <div class="container">
+            <h2 class="section-title neon-text-orange">EXPLORA <span class="neon-text-blue">MÁS</span></h2>
+            <p class="section-subtitle">Encuentra universidades y detalles específicos sobre las carreras que te interesan.</p>
+
+            <div class="explore-grid">
+                <div class="explore-card neon-border-blue">
+                    <h3 class="neon-text-blue">Universidades Disponibles</h3>
+                    <div class="career-details-selector">
+                        <label for="universityCareerFilter" class="block text-sm font-medium text-gray-300 mb-2">Filtrar por carrera:</label>
+                        <select id="universityCareerFilter" class="w-full p-3 rounded-md">
+                            <option value="all">Todas las carreras</option>
+                            <option value="medicina">Medicina</option>
+                            <option value="derecho">Derecho</option>
+                            <option value="administracion">Administración de Empresas</option>
+                            <option value="economia">Economía</option>
+                            <option value="sistemas">Ingeniería de Sistemas</option>
+                            <option value="civil">Ingeniería Civil</option>
+                            <option value="enfermeria">Enfermería</option>
+                            <option value="negocios">Negocios Internacionales</option>
+                            <option value="industrial">Ingeniería Industrial</option>
+                            <option value="comunicacion">Comunicación Social</option>
+                            <option value="psicologia">Psicología</option> <!-- Nueva carrera -->
+                            <option value="trabajo-social">Trabajo Social</option> <!-- Nueva carrera -->
+                            <option value="contaduria">Contaduría Pública</option> <!-- Nueva carrera -->
+                            <option value="odontologia">Odontología</option> <!-- Nueva carrera -->
+                        </select>
+                    </div>
+                    <ul class="university-list" id="universityList">
+                        <!-- University items will be dynamically generated here -->
+                    </ul>
+                </div>
+
+                <div class="explore-card neon-border-orange">
+                    <h3 class="neon-text-orange">Más Acerca de tu Carrera</h3>
+                    <div class="career-details-selector">
+                        <label for="careerDetailSelector" class="block text-sm font-medium text-gray-300 mb-2">Selecciona una carrera:</label>
+                        <select id="careerDetailSelector" class="w-full p-3 rounded-md">
+                            <option value="">Elige una carrera</option>
+                            <option value="medicina">Medicina</option>
+                            <option value="derecho">Derecho</option>
+                            <option value="administracion">Administración de Empresas</option>
+                            <option value="economia">Economía</option>
+                            <option value="sistemas">Ingeniería de Sistemas</option>
+                            <option value="civil">Ingeniería Civil</option>
+                            <option value="enfermeria">Enfermería</option>
+                            <option value="negocios">Negocios Internacionales</option>
+                            <option value="industrial">Ingeniería Industrial</option>
+                            <option value="comunicacion">Comunicación Social</option>
+                            <option value="psicologia">Psicología</option> <!-- Nueva carrera -->
+                            <option value="trabajo-social">Trabajo Social</option> <!-- Nueva carrera -->
+                            <option value="contaduria">Contaduría Pública</option> <!-- Nueva carrera -->
+                            <option value="odontologia">Odontología</option> <!-- Nueva carrera -->
+                        </select>
+                    </div>
+                    <div id="careerDetailsContent" class="career-details-content hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <h4 class="neon-text-orange">Duración:</h4>
+                                <p id="detailDuration"></p>
+                            </div>
+                            <div>
+                                <h4 class="neon-text-orange">Créditos:</h4>
+                                <p id="detailCredits"></p>
+                            </div>
+                            <div>
+                                <h4 class="neon-text-orange">Inversión por semestre (promedio):</h4>
+                                <p id="detailInvestment"></p>
+                            </div>
+                            <div>
+                                <h4 class="neon-text-orange">Campo laboral:</h4>
+                                <p id="detailJobField"></p>
+                            </div>
+                            <div>
+                                <h4 class="neon-text-orange">Demanda:</h4>
+                                <p id="detailDemand"></p>
+                            </div>
+                        </div>
+                        <h4 class="neon-text-orange">Asignaturas principales:</h4>
+                        <ul id="detailSubjects"></ul>
+                        <h4 class="neon-text-orange mt-4">Requisitos clave:</h4>
+                        <ul id="detailRequirements"></ul>
+                    </div>
+                    <div id="noCareerSelected" class="text-center py-8">
+                        <p class="text-gray-400">Selecciona una carrera para ver detalles específicos sobre el plan de estudios, campo laboral y proyecciones.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 class="neon-text-blue">FUTUROS <span class="neon-text-orange">360°</span></h3>
+                    <p>Orientación vocacional con Realidad Virtual</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Explora</h4>
+                    <ul>
+                        <li><a href="#home">Inicio</a></li>
+                        <li><a href="#vocational-test">Prueba Vocacional</a></li>
+                        <li><a href="#chaside-test">Test CHASIDE</a></li> <!-- Nuevo enlace -->
+                        <li><a href="#virtual-reality">Realidad Virtual</a></li>
+                        <li><a href="#explore-more">Explora Más</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="politica-privacidad.html">Política de privacidad</a></li>
+                        <li><a href="terminos-servicio.html">Términos de servicio</a></li>
+                        <li><a href="politica-cookies.html">Cookies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>contacto@futurosen360.edu</p>
+                    <p>+57 123 456 7890</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Futuros en 360°. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // --- Navbar Functionality ---
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                // Close mobile menu if open
+                if (mobileMenu.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                }
+
+                // Remove active class from all links
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                // Add active class to the clicked link
+                link.classList.add('active');
+            });
+        });
+
+        // Smooth scrolling for all internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // --- About Section Tabs Functionality ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deactivate all buttons and hide all content
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Activate clicked button
+                button.classList.add('active');
+
+                // Show corresponding content
+                const targetTab = document.getElementById(button.dataset.tab);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                }
+            });
+        });
+
+        // --- Vocational Test Form Functionality ---
+        const vocationalForm = document.getElementById('vocationalForm');
+        const formSteps = vocationalForm.querySelectorAll('.form-step'); // Select only steps within vocationalForm
+        const progressBar = document.getElementById('progressBar');
+        const loadingSpinner = document.querySelector('#vocationalForm .results-section .spinner');
+        const loadingMessage = document.querySelector('#vocationalForm .results-section .loading-message');
+        const resultsContent = document.getElementById('resultsContent');
+        const resultsTableBody = document.getElementById('resultsTableBody');
+        const topCareersGrid = document.getElementById('topCareersGrid');
+        const restartTestBtn = document.getElementById('restartTestBtn');
+        const exploreAllSimulationsBtn = document.getElementById('exploreAllSimulationsBtn');
+        const vrSimulationsGrid = document.getElementById('vrSimulationsGrid'); // Get the VR simulations grid
+
+        let currentStep = 0;
+
+        // Define career mapping for questions
+        const careerQuestionsMap = {
+            "Medicina": { questions: [1, 2, 3, 4], simulation: "Simulación Médica" },
+            "Derecho": { questions: [5, 6, 7, 8], simulation: "Juicio Virtual" },
+            "Administración de empresas": { questions: [9, 10, 11, 12], simulation: "Gestión Empresarial" },
+            "Economía": { questions: [13, 14, 15, 16], simulation: "Mercado Financiero" },
+            "Ingeniería de sistemas": { questions: [17, 18, 19, 20], simulation: "Desarrollo de Software" },
+            "Ingeniería civil": { questions: [21, 22, 23, 24], simulation: "Construcción Civil" },
+            "Enfermería": { questions: [25, 26, 27, 28], simulation: "Cuidado de Pacientes" },
+            "Negocios internacionales": { questions: [29, 30, 31, 32], simulation: "Negocios Globales" },
+            "Ingeniería industrial": { questions: [33, 34, 35, 36], simulation: "Optimización Industrial" },
+            "Comunicación social": { questions: [37, 38, 39, 40], simulation: "Producción Audiovisual" }
+        };
+
+        function updateProgressBarVocational() {
+            const progress = ((currentStep + 1) / formSteps.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function showStepVocational(stepIndex) {
+            // Validate current step before moving forward
+            if (stepIndex > currentStep) { // Only validate when moving forward
+                const currentFormStep = formSteps[currentStep];
+                const questionGroups = currentFormStep.querySelectorAll('.question-group');
+                let allAnsweredInStep = true;
+
+                questionGroups.forEach(group => {
+                    const radioButtons = group.querySelectorAll('input[type="radio"]');
+                    // Check if there are radio buttons in the group and if any is checked
+                    if (radioButtons.length > 0) {
+                        const isGroupAnswered = Array.from(radioButtons).some(radio => radio.checked);
+                        if (!isGroupAnswered) {
+                            allAnsweredInStep = false;
+                        }
+                    }
+                });
+
+                if (!allAnsweredInStep) {
+                    alert('Por favor, responde todas las preguntas de esta sección antes de continuar.');
+                    return; // Prevent moving to the next step
+                }
+            }
+
+            formSteps.forEach((step, index) => {
+                if (index === stepIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            currentStep = stepIndex;
+            updateProgressBarVocational();
+
+            // Handle navigation buttons state
+            const currentStepElement = formSteps[currentStep];
+            const prevButton = currentStepElement.querySelector('.prev-step');
+            const nextButton = currentStepElement.querySelector('.next-step');
+            const submitButton = currentStepElement.querySelector('button[type="submit"]');
+
+            if (prevButton) {
+                prevButton.disabled = currentStep === 0;
+            }
+            if (nextButton) {
+                nextButton.style.display = currentStep < formSteps.length - 2 ? 'inline-block' : 'none';
+            }
+            if (submitButton) {
+                submitButton.style.display = currentStep === formSteps.length - 2 ? 'inline-block' : 'none';
+            }
+
+            // If it's the results step, trigger result generation
+            if (currentStep === formSteps.length - 1) {
+                generateVocationalResults();
+            }
+        }
+
+        // Event listeners for next/prev buttons
+        vocationalForm.addEventListener('click', (e) => {
+            if (e.target.classList.contains('next-step')) {
+                showStepVocational(currentStep + 1);
+            } else if (e.target.classList.contains('prev-step')) {
+                showStepVocational(currentStep - 1);
+            }
+        });
+
+        // Handle form submission (for results generation)
+        vocationalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showStepVocational(formSteps.length - 1); // Go to results step
+        });
+
+        // Initial display
+        showStepVocational(0);
+
+        // --- Vocational Results Logic ---
+        function getAfinityLevel(score) {
+            if (score >= 13) return { level: "Alta afinidad", class: "alta" };
+            if (score >= 9) return { level: "Afinidad media", class: "media" };
+            if (score >= 5) return { level: "Baja afinidad", class: "baja" };
+            return { level: "Nula afinidad", class: "nula" };
+        }
+
+        function getInterpretation(career, level) {
+            switch (level) {
+                case "Alta afinidad":
+                    return `¡Excelente! Muestras un gran interés y potencial para esta área profesional.`;
+                case "Afinidad media":
+                    return `Tienes un interés considerable en esta área. Podría ser una buena opción para explorar.`;
+                case "Baja afinidad":
+                    return `Tu interés en esta área es limitado, pero siempre hay espacio para descubrir nuevas pasiones.`;
+                case "Nula afinidad":
+                    return `Parece que esta área no es tu mayor interés en este momento.`;
+                default:
+                    return "";
+            }
+        }
+
+        function generateVocationalResults() {
+            loadingSpinner.classList.remove('hidden');
+            loadingMessage.classList.remove('hidden');
+            resultsContent.classList.add('hidden');
+            resultsTableBody.innerHTML = ''; // Clear previous results
+            topCareersGrid.innerHTML = ''; // Clear previous top careers
+
+            setTimeout(() => {
+                const careerScores = {};
+
+                for (const career in careerQuestionsMap) {
+                    let totalScore = 0;
+                    careerQuestionsMap[career].questions.forEach(qNum => {
+                        const questionName = `q${qNum}`;
+                        const selectedOption = vocationalForm.querySelector(`input[name="${questionName}"]:checked`);
+                        if (selectedOption) {
+                            totalScore += parseInt(selectedOption.value);
+                        }
+                    });
+                    careerScores[career] = totalScore;
+                }
+
+                const sortedCareers = Object.keys(careerScores).map(career => {
+                    const score = careerScores[career];
+                    const affinity = getAfinityLevel(score);
+                    const interpretation = getInterpretation(career, affinity.level);
+                    return {
+                        name: career,
+                        score: score,
+                        affinity: affinity.level,
+                        affinityClass: affinity.class,
+                        interpretation: interpretation,
+                        simulation: careerQuestionsMap[career].simulation // Add simulation name
+                    };
+                }).sort((a, b) => b.score - a.score); // Sort descending by score
+
+                // Display top 3 careers with simulation buttons
+                sortedCareers.slice(0, 3).forEach(career => {
+                    const card = document.createElement('div');
+                    card.classList.add('top-career-card');
+                    card.innerHTML = `
+                        <h4>${career.name}</h4>
+                        <p>Afinidad: <span class="affinity-level ${career.affinityClass}">${career.affinity}</span></p>
+                        <p>${career.interpretation}</p>
+                        <button class="btn btn-primary btn-sm explore-vr-btn" data-simulation-target="${career.simulation}">Explorar Simulación</button>
+                    `;
+                    topCareersGrid.appendChild(card);
+                });
+
+                // Display all results in the table
+                sortedCareers.forEach(career => {
+                    const row = document.createElement('tr');
+                    if (career.affinity === "Alta afinidad") {
+                        row.classList.add('high-affinity');
+                    }
+                    row.innerHTML = `
+                        <td>${career.affinity === "Alta afinidad" ? '<i class="fas fa-star star-icon"></i>' : ''}${career.name}</td>
+                        <td>${career.score}</td>
+                        <td class="affinity-level ${career.affinityClass}">${career.affinity}</td>
+                        <td>${career.interpretation}</td>
+                    `;
+                    resultsTableBody.appendChild(row);
+                });
+
+                loadingSpinner.classList.add('hidden');
+                loadingMessage.classList.add('hidden');
+                resultsContent.classList.remove('hidden');
+
+                // Add event listeners to the new "Explore Simulation" buttons
+                document.querySelectorAll('.explore-vr-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetSimulationName = e.target.dataset.simulationTarget;
+                        scrollToSimulation(targetSimulationName);
+                    });
+                });
+
+            }, 2000); // Simulate loading time
+        }
+
+        // Function to scroll to a specific simulation card
+        function scrollToSimulation(simulationName) {
+            const targetSimulationCard = document.querySelector(`.vr-simulation-card[data-simulation-name="${simulationName}"]`);
+            if (targetSimulationCard) {
+                targetSimulationCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Optional: Highlight the card briefly
+                targetSimulationCard.style.transition = 'box-shadow 0.5s ease, transform 0.5s ease';
+                targetSimulationCard.style.boxShadow = '0 0 30px var(--neon-orange), 0 0 10px var(--neon-orange)';
+                setTimeout(() => {
+                    targetSimulationCard.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.4)'; // Reset to original
+                }, 2000);
+            } else {
+                alert(`Simulación para "${simulationName}" no encontrada.`);
+            }
+        }
+
+        // Restart Test Button
+        restartTestBtn.addEventListener('click', () => {
+            vocationalForm.reset(); // Reset all form fields
+            showStepVocational(0); // Go back to the first step
+        });
+
+        // Explore All Simulations Button
+        exploreAllSimulationsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('#virtual-reality').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+
+        // --- CHASIDE Test Form Functionality ---
+        const chasideForm = document.getElementById('chasideForm');
+        const chasideFormSteps = chasideForm.querySelectorAll('.form-step');
+        const chasideProgressBar = document.getElementById('chasideProgressBar');
+        const chasideLoadingSpinner = document.querySelector('#chasideForm .results-section .spinner');
+        const chasideLoadingMessage = document.querySelector('#chasideForm .results-section .loading-message');
+        const chasideResultsContent = document.getElementById('chasideResultsContent');
+        const chasideResultsTableBody = document.getElementById('chasideResultsTableBody');
+        const restartChasideTestBtn = document.getElementById('restartChasideTestBtn');
+        const exploreChasideSimulationsBtn = document.getElementById('exploreChasideSimulationsBtn');
+
+        let currentChasideStep = 0;
+
+        const chasideCategories = {
+            "H": {
+                name: "Humanísticas, Ciencias Jurídicas y Sociales",
+                questions: ["chaside-h1", "chaside-h2", "chaside-h3", "chaside-h4", "chaside-h5", "chaside-h6", "chaside-h7"],
+                relatedCareers: ["Derecho", "Psicología", "Trabajo Social", "Comunicación Social"]
+            },
+            "C": {
+                name: "Administrativas y Contables",
+                questions: ["chaside-c1", "chaside-c2", "chaside-c3", "chaside-c4", "chaside-c5", "chaside-c6", "chaside-c7"],
+                relatedCareers: ["Administración de Empresas", "Contaduría Pública", "Economía", "Negocios Internacionales"]
+            },
+            "S": {
+                name: "Ciencias de la Salud",
+                questions: ["chaside-s1", "chaside-s2", "chaside-s3", "chaside-s4", "chaside-s5", "chaside-s6", "chaside-s7"],
+                relatedCareers: ["Medicina", "Enfermería", "Odontología"]
+            },
+            "I": {
+                name: "Ingenierías, Carreras Técnicas y Computación",
+                questions: ["chaside-i1", "chaside-i2", "chaside-i3", "chaside-i4", "chaside-i5", "chaside-i6", "chaside-i7"],
+                relatedCareers: ["Ingeniería de Sistemas", "Ingeniería Civil", "Ingeniería Industrial"]
+            }
+        };
+
+        function updateChasideProgressBar() {
+            const progress = ((currentChasideStep + 1) / chasideFormSteps.length) * 100;
+            chasideProgressBar.style.width = `${progress}%`;
+        }
+
+        function showChasideStep(stepIndex) {
+            // Validate current step before moving forward
+            if (stepIndex > currentChasideStep) { // Only validate when moving forward
+                const currentFormStep = chasideFormSteps[currentChasideStep];
+                const questionGroups = currentFormStep.querySelectorAll('.question-group');
+                let allAnsweredInStep = true;
+
+                questionGroups.forEach(group => {
+                    const radioButtons = group.querySelectorAll('input[type="radio"]');
+                    if (radioButtons.length > 0) {
+                        const isGroupAnswered = Array.from(radioButtons).some(radio => radio.checked);
+                        if (!isGroupAnswered) {
+                            allAnsweredInStep = false;
+                        }
+                    }
+                });
+
+                if (!allAnsweredInStep) {
+                    alert('Por favor, responde todas las preguntas de esta sección antes de continuar.');
+                    return; // Prevent moving to the next step
+                }
+            }
+
+            chasideFormSteps.forEach((step, index) => {
+                if (index === stepIndex) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            currentChasideStep = stepIndex;
+            updateChasideProgressBar();
+
+            // Handle navigation buttons state
+            const currentStepElement = chasideFormSteps[currentChasideStep];
+            const prevButton = currentStepElement.querySelector('.chaside-prev-step');
+            const nextButton = currentStepElement.querySelector('.chaside-next-step');
+            const submitButton = currentStepElement.querySelector('button[type="submit"]');
+
+            if (prevButton) {
+                prevButton.disabled = currentChasideStep === 0;
+            }
+            if (nextButton) {
+                nextButton.style.display = currentChasideStep < chasideFormSteps.length - 2 ? 'inline-block' : 'none';
+            }
+            if (submitButton) {
+                submitButton.style.display = currentChasideStep === chasideFormSteps.length - 2 ? 'inline-block' : 'none';
+            }
+
+            // If it's the results step, trigger result generation
+            if (currentChasideStep === chasideFormSteps.length - 1) {
+                generateChasideResults();
+            }
+        }
+
+        // Event listeners for next/prev buttons for CHASIDE
+        chasideForm.addEventListener('click', (e) => {
+            if (e.target.classList.contains('chaside-next-step')) {
+                showChasideStep(currentChasideStep + 1);
+            } else if (e.target.classList.contains('chaside-prev-step')) {
+                showChasideStep(currentChasideStep - 1);
+            }
+        });
+
+        // Handle form submission for CHASIDE
+        chasideForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showChasideStep(chasideFormSteps.length - 1); // Go to results step
+        });
+
+        // Initial display for CHASIDE
+        showChasideStep(0);
+
+        // --- CHASIDE Results Logic ---
+        function getChasideAfinityLevel(score) {
+            if (score >= 6) return { level: "Alta afinidad", class: "alta" };
+            if (score >= 4) return { level: "Afinidad media", class: "media" };
+            if (score >= 2) return { level: "Baja afinidad", class: "baja" };
+            return { level: "Nula afinidad", class: "nula" };
+        }
+
+        function generateChasideResults() {
+            chasideLoadingSpinner.classList.remove('hidden');
+            chasideLoadingMessage.classList.remove('hidden');
+            chasideResultsContent.classList.add('hidden');
+            chasideResultsTableBody.innerHTML = ''; // Clear previous results
+
+            setTimeout(() => {
+                const chasideScores = {};
+
+                for (const categoryKey in chasideCategories) {
+                    let totalScore = 0;
+                    chasideCategories[categoryKey].questions.forEach(qName => {
+                        const selectedOption = chasideForm.querySelector(`input[name="${qName}"]:checked`);
+                        if (selectedOption) {
+                            totalScore += parseInt(selectedOption.value);
+                        }
+                    });
+                    chasideScores[categoryKey] = totalScore;
+                }
+
+                for (const categoryKey in chasideScores) {
+                    const score = chasideScores[categoryKey];
+                    const category = chasideCategories[categoryKey];
+                    const affinity = getChasideAfinityLevel(score);
+                    const relatedCareers = category.relatedCareers.join(', ');
+
+                    const row = document.createElement('tr');
+                    if (affinity.level === "Alta afinidad") {
+                        row.classList.add('high-affinity');
+                    }
+                    row.innerHTML = `
+                        <td>${category.name}</td>
+                        <td>${score}</td>
+                        <td class="affinity-level ${affinity.class}">${affinity.level}</td>
+                        <td>${relatedCareers}</td>
+                    `;
+                    chasideResultsTableBody.appendChild(row);
+                }
+
+                chasideLoadingSpinner.classList.add('hidden');
+                chasideLoadingMessage.classList.add('hidden');
+                chasideResultsContent.classList.remove('hidden');
+
+            }, 2000); // Simulate loading time
+        }
+
+        // Restart CHASIDE Test Button
+        restartChasideTestBtn.addEventListener('click', () => {
+            chasideForm.reset(); // Reset all form fields
+            showChasideStep(0); // Go back to the first step
+        });
+
+        // Explore CHASIDE Simulations Button (links to VR section)
+        exploreChasideSimulationsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('#virtual-reality').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+
+        // --- Realidad Virtual Section Filtering ---
+        const vrFilterButtons = document.querySelectorAll('.vr-filter-btn');
+        const careerCardsGrid = document.getElementById('careerCardsGrid');
+        const careerCards = document.querySelectorAll('.career-card');
+
+        vrFilterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                vrFilterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to the clicked button
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                careerCards.forEach(card => {
+                    const category = card.dataset.category;
+                    if (filter === 'all' || category === filter) {
+                        card.style.display = 'block'; // Show card
+                    } else {
+                        card.style.display = 'none'; // Hide card
+                    }
+                });
+            });
+        });
+
+        // --- Explore More Section - University Filter ---
+        const universityCareerFilter = document.getElementById('universityCareerFilter');
+        const universityList = document.getElementById('universityList');
+        // Data for universities and their careers
+        const universitiesData = [
+            {
+                name: "UNIVERSIDAD DE LOS ANDES",
+                careers: {
+                    medicina: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/medicina",
+                    negocios: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/gobierno-asuntos-publicos",
+                    comunicacion: "https://ceper.uniandes.edu.co/programas/narrativas-digitales/",
+                    enfermeria: null,
+                    administracion: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/estudia-administracion",
+                    sistemas: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/ingenieria-sistemas-computacion",
+                    industrial: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/ingenieria-industrial",
+                    economia: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/economia",
+                    derecho: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/derecho",
+                    civil: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/ingenieria-civil",
+                    psicologia: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/psicologia",
+                    "trabajo-social": null, // Asumiendo que no tienen un enlace directo o no la ofrecen
+                    contaduria: "https://aspirantes.uniandes.edu.co/pregrado/oferta-academica/contaduria-internacional",
+                    odontologia: null
+                }
+            },
+            {
+                name: "PONTIFICIA UNIVERSIDAD JAVERIANA",
+                careers: {
+                    medicina: "https://www.javeriana.edu.co/carrera-medicina",
+                    negocios: "https://www.javeriana.edu.co/carrera-negocios-internacionales",
+                    comunicacion: "https://www.javeriana.edu.co/carrera-comunicacion-social",
+                    enfermeria: "https://www.javeriana.edu.co/carrera-enfermeria",
+                    administracion: "https://www.javeriana.edu.co/carrera-administracion-de-empresas",
+                    sistemas: "https://www.javeriana.edu.co/carrera-ingenieria-de-sistemas",
+                    industrial: "https://www.javeriana.edu.co/carrera-ingenieria-industrial",
+                    economia: "https://www.javeriana.edu.co/carrera-economia",
+                    derecho: "https://www.javeriana.edu.co/carrera-derecho",
+                    civil: "https://www.javeriana.edu.co/carrera-ingenieria-civil",
+                    psicologia: "https://www.javeriana.edu.co/carrera-psicologia",
+                    "trabajo-social": "https://www.javeriana.edu.co/carrera-trabajo-social",
+                    contaduria: "https://www.javeriana.edu.co/carrera-contaduria-publica",
+                    odontologia: "https://www.javeriana.edu.co/carrera-odontologia"
+                }
+            },
+            {
+                name: "UNIVERSIDAD DEL EXTERNADO",
+                careers: {
+                    medicina: null,
+                    negocios: "https://www.uexternado.edu.co/finanzas-gobierno-y-relaciones-internacionales/",
+                    comunicacion: "https://www.uexternado.edu.co/comunicacion-social-periodismo/",
+                    enfermeria: null,
+                    administracion: "https://www.uexternado.edu.co/administracion-de-empresas/",
+                    sistemas: null,
+                    industrial: null,
+                    economia: "https://www.uexternado.edu.co/economia/",
+                    derecho: "https://www.uexternado.edu.co/derecho/",
+                    civil: null,
+                    psicologia: "https://www.uexternado.edu.co/psicologia/",
+                    "trabajo-social": null,
+                    contaduria: "https://www.uexternado.edu.co/contaduria-publica/",
+                    odontologia: null
+                }
+            },
+            {
+                name: "UNIVERSIDAD DEL VALLE",
+                careers: {
+                    medicina: "https://salud.univalle.edu.co/medicina-y-cirugia",
+                    negocios: null,
+                    comunicacion: "https://comunicacionsocial.univalle.edu.co/pregrado-en-comunicacion-social-periodismo",
+                    enfermeria: "https://salud.univalle.edu.co/enfermeria",
+                    administracion: "http://administracion.univalle.edu.co/administracion-de-empresas",
+                    sistemas: "http://eisc.univalle.edu.co/index.php/programas-academicos/ingenieria-de-sistemas",
+                    industrial: "http://industrial.univalle.edu.co/pregrado-en-ingenieria-industrial",
+                    economia: "http://socioeconomia.univalle.edu.co/economia",
+                    derecho: "https://derechopolitica.univalle.edu.co/derecho",
+                    civil: "http://eicg.univalle.edu.co/pregrado/ingenieria-civil",
+                    psicologia: "https://psicologia.univalle.edu.co/pregrado-en-psicologia",
+                    "trabajo-social": "https://trabajosocial.univalle.edu.co/pregrado-en-trabajo-social",
+                    contaduria: "http://contaduria.univalle.edu.co/pregrado-en-contaduria-publica",
+                    odontologia: "https://salud.univalle.edu.co/odontologia"
+                }
+            },
+            {
+                name: "UNIVERSIDAD DE LA SABANA",
+                careers: {
+                    medicina: "https://www.unisabana.edu.co/programas/pregrados/medicina",
+                    negocios: "https://www.unisabana.edu.co/programas/pregrados/administracion-de-negocios-internacionales",
+                    comunicacion: "https://www.unisabana.edu.co/programas/pregrados/comunicacion-social-y-periodismo",
+                    enfermeria: "https://www.unisabana.edu.co/programas/pregrados/enfermeria",
+                    administracion: "https://www.unisabana.edu.co/programas/pregrados/administracion-de-empresas",
+                    sistemas: null,
+                    industrial: "https://www.unisabana.edu.co/programas/pregrados/ingenieria-industrial",
+                    economia: "https://www.unisabana.edu.co/programas/pregrados/economia-y-finanzas-internacionales",
+                    derecho: "https://www.unisabana.edu.co/programas/pregrados/derecho",
+                    civil: "https://www.unisabana.edu.co/programas/pregrados/ingenieria-civil",
+                    psicologia: "https://www.unisabana.edu.co/programas/pregrados/psicologia",
+                    "trabajo-social": null,
+                    contaduria: "https://www.unisabana.edu.co/programas/pregrados/contaduria-publica-internacional",
+                    odontologia: "https://www.unisabana.edu.co/programas/pregrados/odontologia"
+                }
+            },
+            {
+                name: "UNIVERSIDAD DEL ROSARIO",
+                careers: {
+                    medicina: "https://urosario.edu.co/medicina",
+                    negocios: "https://urosario.edu.co/administracion-de-negocios-internacionales",
+                    comunicacion: null,
+                    enfermeria: "https://urosario.edu.co/enfermeria",
+                    administracion: "https://urosario.edu.co/administracion-de-empresas",
+                    sistemas: "https://urosario.edu.co/ingenieria-de-sistemas-energeticos",
+                    industrial: "https://urosario.edu.co/ingenieria-industrial",
+                    economia: "https://urosario.edu.co/programa-en-economia",
+                    derecho: null,
+                    civil: null,
+                    psicologia: "https://urosario.edu.co/psicologia",
+                    "trabajo-social": null,
+                    contaduria: "https://urosario.edu.co/contaduria-publica",
+                    odontologia: null
+                }
+            },
+            {
+                name: "UNIVERSIDAD DEL NORTE",
+                careers: {
+                    medicina: "https://www.uninorte.edu.co/web/medicina",
+                    negocios: "https://www.uninorte.edu.co/web/negocios-internacionales",
+                    comunicacion: "https://www.uninorte.edu.co/web/comunicacion-social-y-periodismo",
+                    enfermeria: "https://www.uninorte.edu.co/web/enfermeria",
+                    administracion: "https://www.uninorte.edu.co/web/administracion-de-empresas",
+                    sistemas: "https://www.uninorte.edu.co/web/ingenieria-de-sistemas-y-computacion",
+                    industrial: "https://www.uninorte.edu.co/web/ingenieria-industrial",
+                    economia: "https://www.uninorte.edu.co/web/economia",
+                    derecho: "https://www.uninorte.edu.co/web/derecho",
+                    civil: "https://www.uninorte.edu.co/web/ingenieria-civil",
+                    psicologia: "https://www.uninorte.edu.co/web/psicologia",
+                    "trabajo-social": null,
+                    contaduria: "https://www.uninorte.edu.co/web/contaduria-publica",
+                    odontologia: "https://www.uninorte.edu.co/web/odontologia"
+                }
+            },
+            {
+                name: "UNIVERSIDAD INDUSTRIAL DE SANTANDER (UIS)",
+                careers: {
+                    medicina: "https://pregrados.uis.edu.co/pregrado-en-medicina/",
+                    negocios: null,
+                    comunicacion: null,
+                    enfermeria: "https://pregrados.uis.edu.co/pregrado-en-enfermeria/",
+                    administracion: null, // No link provided, assuming not available or needs to be added
+                    sistemas: "https://pregrados.uis.edu.co/pregrado-en-ingenieria-de-sistemas/",
+                    industrial: "https://pregrados.uis.edu.co/pregrado-en-ingenieria-industrial/",
+                    economia: "https://pregrados.uis.edu.co/pregrado-en-economia/",
+                    derecho: "https://pregrados.uis.edu.co/pregrado-en-derecho/",
+                    civil: "https://pregrados.uis.edu.co/pregrado-en-ingenieria-civil/",
+                    psicologia: null,
+                    "trabajo-social": null,
+                    contaduria: "https://pregrados.uis.edu.co/pregrado-en-contaduria-publica/",
+                    odontologia: null
+                }
+            },
+            {
+                name: "UNIVERSIDAD DE ANTIOQUIA (UdeA)",
+                careers: {
+                    medicina: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/medicina/estudiar-facultad/pregrados/medicina",
+                    negocios: null,
+                    comunicacion: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/comunicaciones/estudiar-facultad/pregrados/comunicacion-social-periodismo",
+                    enfermeria: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/enfermeria/estudiar-facultad/pregrado/enfermeria",
+                    administracion: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ciencias-economicas/estudiar-facultad/pregrados/administracion-empresas",
+                    sistemas: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ingenieria/estudiar-facultad/pregrados/ingenieria-sistemas",
+                    industrial: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ingenieria/estudiar-facultad/pregrados/ingenieria-industrial",
+                    economia: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ciencias-economicas/estudiar-facultad/pregrados/economia",
+                    derecho: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/derecho-ciencias-politicas/estudiar-facultad/pregrados/derecho",
+                    civil: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ingenieria/estudiar-facultad/pregrados/ingenieria-civil",
+                    psicologia: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ciencias-sociales-humanas/estudiar-facultad/pregrados/psicologia",
+                    "trabajo-social": "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ciencias-sociales-humanas/estudiar-facultad/pregrados/trabajo-social",
+                    contaduria: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/ciencias-economicas/estudiar-facultad/pregrados/contaduria-publica",
+                    odontologia: "https://www.udea.edu.co/wps/portal/udea/web/inicio/unidades-academicas/odontologia/estudiar-facultad/pregrados/odontologia"
+                }
+            },
+            {
+                name: "UNIVERSIDAD NACIONAL",
+                careers: {
+                    medicina: "https://diracad.bogota.unal.edu.co/unaspirante/programas/medicina",
+                    negocios: null,
+                    comunicacion: null,
+                    enfermeria: "https://diracad.bogota.unal.edu.co/unaspirante/programas/enfermeria",
+                    administracion: "https://diracad.bogota.unal.edu.co/unaspirante/programas/empresas",
+                    sistemas: "https://diracad.bogota.unal.edu.co/unaspirante/programas/isistemas",
+                    industrial: "https://diracad.bogota.unal.edu.co/unaspirante/programas/iindustrial",
+                    economia: "https://diracad.bogota.unal.edu.co/unaspirante/programas/economia",
+                    derecho: "https://diracad.bogota.unal.edu.co/unaspirante/programas/derecho",
+                    civil: "https://diracad.bogota.unal.edu.co/unaspirante/programas/icivil",
+                    psicologia: "https://diracad.bogota.unal.edu.co/unaspirante/programas/psicologia",
+                    "trabajo-social": "https://diracad.bogota.unal.edu.co/unaspirante/programas/trabajo-social",
+                    contaduria: "https://diracad.bogota.unal.edu.co/unaspirante/programas/contaduria-publica",
+                    odontologia: "https://diracad.bogota.unal.edu.co/unaspirante/programas/odontologia"
+                }
+            }
+        ];
+
+        function renderUniversityList(filter = 'all') {
+            universityList.innerHTML = ''; // Clear current list
+
+            universitiesData.forEach(uni => {
+                const li = document.createElement('li');
+                li.classList.add('university-item');
+
+                const h4 = document.createElement('h4');
+                h4.textContent = uni.name;
+                li.appendChild(h4);
+
+                const careerLinksDiv = document.createElement('div');
+                careerLinksDiv.classList.add('career-links');
+                let careersAvailable = false;
+
+                for (const careerKey in uni.careers) {
+                    const careerUrl = uni.careers[careerKey];
+                    const careerNameDisplay = {
+                        medicina: "Medicina",
+                        derecho: "Derecho",
+                        administracion: "Administración de Empresas",
+                        economia: "Economía",
+                        sistemas: "Ingeniería de Sistemas",
+                        civil: "Ingeniería Civil",
+                        enfermeria: "Enfermería",
+                        negocios: "Negocios Internacionales",
+                        industrial: "Ingeniería Industrial",
+                        comunicacion: "Comunicación Social",
+                        psicologia: "Psicología",
+                        "trabajo-social": "Trabajo Social",
+                        contaduria: "Contaduría Pública",
+                        odontologia: "Odontología"
+                    }[careerKey];
+
+                    if (careerUrl && (filter === 'all' || filter === careerKey)) {
+                        const a = document.createElement('a');
+                        a.href = careerUrl;
+                        a.target = "_blank"; // Open in new tab
+                        a.rel = "noopener noreferrer"; // Security best practice
+                        a.textContent = careerNameDisplay;
+                        careerLinksDiv.appendChild(a);
+                        careersAvailable = true;
+                    }
+                }
+
+                if (!careersAvailable && filter !== 'all') {
+                    // If a specific filter is applied and no careers match for this university
+                    li.style.display = 'none';
+                } else if (!careersAvailable && filter === 'all') {
+                    // If no careers are available at all for this university
+                    const noAvailable = document.createElement('p');
+                    noAvailable.classList.add('no-available');
+                    noAvailable.textContent = "No hay carreras disponibles con enlace.";
+                    careerLinksDiv.appendChild(noAvailable);
+                }
+                
+                li.appendChild(careerLinksDiv);
+                universityList.appendChild(li);
+            });
+        }
+
+        // Initial render of the university list
+        renderUniversityList();
+
+        universityCareerFilter.addEventListener('change', (e) => {
+            renderUniversityList(e.target.value);
+        });
+
+        // --- Explore More Section - Career Details ---
+        const careerDetailSelector = document.getElementById('careerDetailSelector');
+        const careerDetailsContent = document.getElementById('careerDetailsContent');
+        const noCareerSelected = document.getElementById('noCareerSelected');
+
+        const detailDuration = document.getElementById('detailDuration');
+        const detailCredits = document.getElementById('detailCredits'); // NUEVA REFERENCIA
+        const detailInvestment = document.getElementById('detailInvestment'); // REFERENCIA ACTUALIZADA
+        const detailJobField = document.getElementById('detailJobField');
+        const detailDemand = document.getElementById('detailDemand');
+        const detailSubjects = document.getElementById('detailSubjects');
+        const detailRequirements = document.getElementById('detailRequirements');
+
+        const careersData = {
+            medicina: {
+                duration: "12 a 13 semestres",
+                credits: "227 a 325 créditos",
+                investment: "$7.4 a $36.2 millones COP",
+                jobField: "Hospitales, clínicas, centros de investigación, consultorios privados.",
+                demand: "Alta",
+                subjects: ["Anatomía", "Fisiología", "Farmacología", "Patología", "Cirugía"],
+                requirements: ["Vocación de servicio", "Resistencia al estrés", "Capacidad de análisis", "Empatía"]
+            },
+            derecho: {
+                duration: "9 a 10 semestres",
+                credits: "159 a 194 créditos",
+                investment: "$972 mil a $27.1 millones COP",
+                jobField: "Firmas de abogados, sector público, empresas, ONGs, docencia.",
+                demand: "Media-Alta",
+                subjects: ["Derecho Constitucional", "Derecho Penal", "Derecho Civil", "Derecho Laboral", "Argumentación Jurídica"],
+                requirements: ["Capacidad de argumentación", "Pensamiento crítico", "Ética profesional", "Habilidad de negociación"]
+            },
+            administracion: {
+                duration: "8 a 10 semestres",
+                credits: "134 a 180 créditos",
+                investment: "$7.4 a $25.4 millones COP",
+                jobField: "Empresas de todos los sectores, consultoría, emprendimiento, banca.",
+                demand: "Alta",
+                subjects: ["Contabilidad", "Finanzas", "Marketing", "Recursos Humanos", "Gestión Estratégica"],
+                requirements: ["Liderazgo", "Organización", "Toma de decisiones", "Visión de negocio"]
+            },
+            economia: {
+                duration: "8 a 10 semestres",
+                credits: "136 a 166 créditos",
+                investment: "$7.4 a $25.1 millones COP",
+                jobField: "Banca, finanzas, consultoría, sector público, investigación, organismos internacionales.",
+                demand: "Media",
+                subjects: ["Microeconomía", "Macroeconomía", "Econometría", "Finanzas Públicas", "Desarrollo Económico"],
+                requirements: ["Pensamiento analítico", "Habilidad numérica", "Interés por la actualidad", "Capacidad de investigación"]
+            },
+            sistemas: {
+                duration: "8 a 10 semestres",
+                credits: "134 a 167 créditos",
+                investment: "$6.7 a $24.1 millones COP",
+                jobField: "Empresas de tecnología, desarrollo de software, consultoría IT, ciberseguridad, inteligencia artificial.",
+                demand: "Muy Alta",
+                subjects: ["Programación", "Bases de Datos", "Redes", "Inteligencia Artificial", "Desarrollo Web"],
+                requirements: ["Lógica", "Resolución de problemas", "Creatividad", "Aprendizaje continuo"]
+            },
+            civil: {
+                duration: "8 a 10 semestres",
+                credits: "134 a 173 créditos",
+                investment: "$972 mil a $19.4 millones COP",
+                jobField: "Constructoras, consultoras de ingeniería, sector público (infraestructura), gestión de proyectos.",
+                demand: "Media-Alta",
+                subjects: ["Cálculo", "Física", "Mecánica de Suelos", "Estructuras", "Hidráulica"],
+                requirements: ["Precisión", "Visión espacial", "Responsabilidad", "Trabajo en equipo"]
+            },
+            enfermeria: {
+                duration: "8 a 10 semestres",
+                credits: "144 a 189 créditos",
+                investment: "$7.4 a $19 millones COP",
+                jobField: "Hospitales, clínicas, centros de salud, atención domiciliaria, colegios, empresas.",
+                demand: "Alta",
+                subjects: ["Anatomía", "Fisiología", "Farmacología", "Salud Pública", "Cuidado del Paciente"],
+                requirements: ["Empatía", "Resistencia física y emocional", "Atención al detalle", "Vocación de servicio"]
+            },
+            negocios: {
+                duration: "8 a 10 semestres",
+                credits: "128 a 185 créditos",
+                investment: "$18.5 a $25.5 millones COP",
+                jobField: "Empresas multinacionales, comercio exterior, logística, consultoría internacional, banca.",
+                demand: "Alta",
+                subjects: ["Comercio Internacional", "Marketing Global", "Finanzas Internacionales", "Logística", "Derecho Internacional"],
+                requirements: ["Visión global", "Habilidad de negociación", "Adaptabilidad cultural", "Dominio de idiomas"]
+            },
+            industrial: {
+                duration: "8 a 10 semestres",
+                credits: "134 a 166 créditos",
+                investment: "$972 mil a $24.1 millones COP",
+                jobField: "Manufactura, logística, consultoría de procesos, banca, servicios, salud.",
+                demand: "Alta",
+                subjects: ["Investigación de Operaciones", "Gestión de Calidad", "Logística", "Diseño de Sistemas Productivos", "Ergonomía"],
+                requirements: ["Pensamiento sistémico", "Optimización", "Liderazgo", "Análisis de datos"]
+            },
+            comunicacion: {
+                duration: "8 a 10 semestres",
+                credits: "123 a 170 créditos",
+                investment: "$7.4 a $24.1 millones COP",
+                jobField: "Medios de comunicación, agencias de publicidad, relaciones públicas, marketing digital, producción audiovisual.",
+                demand: "Media",
+                subjects: ["Teorías de la Comunicación", "Periodismo", "Publicidad", "Relaciones Públicas", "Producción Audiovisual"],
+                requirements: ["Creatividad", "Habilidad de escritura", "Pensamiento crítico", "Adaptabilidad a nuevas tecnologías"]
+            },
+            psicologia: {
+                duration: "8 a 10 semestres",
+                credits: "130 a 160 créditos",
+                investment: "$7.4 a $25.4 millones COP",
+                jobField: "Clínicas, hospitales, colegios, empresas, consultoría, investigación.",
+                demand: "Alta",
+                subjects: ["Psicología General", "Psicología del Desarrollo", "Psicopatología", "Neuropsicología", "Psicología Social"],
+                requirements: ["Empatía", "Capacidad de escucha", "Análisis crítico", "Ética profesional"]
+            },
+            "trabajo-social": {
+                duration: "8 a 10 semestres",
+                credits: "120 a 150 créditos",
+                investment: "$972 mil a $15 millones COP",
+                jobField: "ONGs, instituciones gubernamentales, hospitales, colegios, empresas, desarrollo comunitario.",
+                demand: "Media",
+                subjects: ["Teorías del Trabajo Social", "Políticas Sociales", "Intervención Social", "Investigación Social", "Derechos Humanos"],
+                requirements: ["Sensibilidad social", "Compromiso ético", "Habilidad para trabajar con comunidades", "Resolución de conflictos"]
+            },
+            contaduria: {
+                duration: "8 a 10 semestres",
+                credits: "140 a 170 créditos",
+                investment: "$7.4 a $20 millones COP",
+                jobField: "Empresas públicas y privadas, auditoría, consultoría, finanzas, impuestos.",
+                demand: "Alta",
+                subjects: ["Contabilidad Financiera", "Contabilidad de Costos", "Auditoría", "Finanzas Corporativas", "Tributaria"],
+                requirements: ["Precisión", "Análisis numérico", "Organización", "Ética profesional"]
+            },
+            odontologia: {
+                duration: "10 a 12 semestres",
+                credits: "180 a 220 créditos",
+                investment: "$7.4 a $30 millones COP",
+                jobField: "Clínicas dentales, hospitales, consultorios privados, investigación, docencia.",
+                demand: "Media-Alta",
+                subjects: ["Anatomía Dental", "Patología Oral", "Operatoria Dental", "Cirugía Oral", "Ortodoncia"],
+                requirements: ["Destreza manual", "Atención al detalle", "Empatía", "Paciencia"]
+            }
+        };
+
+        careerDetailSelector.addEventListener('change', (e) => {
+            const selectedCareer = e.target.value;
+
+            if (selectedCareer && careersData[selectedCareer]) {
+                const data = careersData[selectedCareer];
+                detailDuration.textContent = data.duration;
+                detailCredits.textContent = data.credits;
+                detailInvestment.textContent = data.investment;
+                detailJobField.textContent = data.jobField;
+                detailDemand.textContent = data.demand;
+
+                detailSubjects.innerHTML = data.subjects.map(s => `<li>${s}</li>`).join('');
+                detailRequirements.innerHTML = data.requirements.map(r => `<li>${r}</li>`).join('');
+
+                careerDetailsContent.classList.remove('hidden');
+                noCareerSelected.classList.add('hidden');
+            } else {
+                careerDetailsContent.classList.add('hidden');
+                noCareerSelected.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
